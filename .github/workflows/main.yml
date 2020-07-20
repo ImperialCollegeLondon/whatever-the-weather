@@ -1,0 +1,16 @@
+on:
+  schedule:
+    - cron: "0 6 * * 1-5"
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    env:
+      EMAIL: ${{ secrets.EMAIL }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - run: python main.py
+        if: ${{ env.EMAIL }}
