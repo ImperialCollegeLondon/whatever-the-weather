@@ -17,14 +17,14 @@ location = locator.geocode(locationstring)
 print("Fetching weather for: ",location.address)
 print("Latitude = {}, Longitude = {}".format(location.latitude, location.longitude))
 
-with urllib.request.urlopen("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=51.5&lon=0") as fp:
+with urllib.request.urlopen(f"https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={location.latitude}&lon={location.longitude}") as fp:
     forecast = json.load(fp)
     precipitation = forecast["properties"]["timeseries"][0]["data"]["next_6_hours"]["details"]["precipitation_amount"]
 
     print(f"{precipitation}mm of precipitation is forecast.")
 
     if precipitation > 0:
-        msg = f"Subject: Don't forget your umbrella!\n\n{precipitation}mm of precipitation is forecast."
+        msg = f"Subject: Don't forget your umbrella!\n\n{precipitation}mm of precipitation is forecast in {location.address}."
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL("smtp.gmail.com", context=context) as server:
             server.login(email, password)
